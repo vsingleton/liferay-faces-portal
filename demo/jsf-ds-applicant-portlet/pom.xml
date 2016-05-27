@@ -9,7 +9,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>com.liferay.faces.demo.jsf.ds.applicant.portlet</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>jsf-ds-applicant</name>
 
 	<properties>
@@ -20,7 +20,7 @@
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>com.liferay.faces.alloy</artifactId>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>com.liferay.faces.bridge.impl</artifactId>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>${faces.group.id}</groupId>
 			<artifactId>${faces.impl.artifact.id}</artifactId>
-			<scope>runtime</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
@@ -92,12 +92,20 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
+				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
 					<archive>
-						<manifestFile>${project.build.directory}/${project.build.finalName}/WEB-INF/classes/META-INF/MANIFEST.MF</manifestFile>
+						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
+					<includes>
+						<include>META-INF/**</include>
+						<include>OSGI-*/**</include>
+						<include>WEB-INF/**</include>
+						<include>i18n.properties</include>
+						<include>i18nFaces.properties</include>
+						<include>log4j.properties</include>
+					</includes>
 				</configuration>
 			</plugin>
 		</plugins>
