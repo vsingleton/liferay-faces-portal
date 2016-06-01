@@ -32,7 +32,7 @@ import com.liferay.faces.util.logging.LoggerFactory;
 import com.liferay.faces.util.model.UploadedFile;
 
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.service.UserLocalService;
 
 
 /**
@@ -121,11 +121,17 @@ public class UsersBackingBean {
 
 		try {
 
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			UserLocalService userLocalService = (UserLocalService) facesContext.getExternalContext().getApplicationMap()
+				.get("userLocalService");
+
 			// Update the selected user in the Liferay database.
 			User user = usersModelBean.getSelectedUser();
 			long userId = user.getUserId();
-			UserLocalServiceUtil.updateStatus(userId, user.getStatus());
-			UserLocalServiceUtil.updateUser(user);
+
+			// commenting out the following deprecated updateStatus call fixes FACES-2667
+			// userLocalService.updateStatus(userId, user.getStatus());
+			userLocalService.updateUser(user);
 
 			// If the end-user uploaded a portrait, then update the portrait in
 			// the Liferay database and delete the temporary file.
@@ -134,7 +140,7 @@ public class UsersBackingBean {
 			if (modelUploadedFile != null) {
 
 				byte[] imageBytes = modelUploadedFile.getBytes();
-				UserLocalServiceUtil.updatePortrait(userId, imageBytes);
+				userLocalService.updatePortrait(userId, imageBytes);
 				modelUploadedFile.delete();
 			}
 		}
